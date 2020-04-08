@@ -4,9 +4,7 @@ services:
     app:
         build: .
         container_name: app
-        entrypoint: dockerize -template ./.docker/php/env.tmpl:./.env -wait tcp://db:3306 -timeout 60s ./.docker/entrypoint.sh
-        ports:
-            - "9000"
+        entrypoint: dockerize -template ./.docker/app/.env:.env -wait tcp://db:3306 -timeout 120s ./.docker/entrypoint.sh
         environment:
             - DB_HOST=db
             - DB_DATABASE=laravel
@@ -41,9 +39,7 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - ./.docker/database/dumps:/dumps:rw,cached
-            - ./.docker/database/data:/var/lib/mysql:rw,cached
-            - ./.docker/database/config:/etc/mysql/conf.d:rw,cached
+            - ./.docker/dbdata:/var/lib/mysql
         environment:
             - MYSQL_DATABASE=laravel
             - MYSQL_USER=root
